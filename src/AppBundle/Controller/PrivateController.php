@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Trayecto;
 
 class PrivateController extends Controller
 {
@@ -42,7 +43,28 @@ class PrivateController extends Controller
          * 1.- Crear carpeta nueva /app/Resources/views/trayecto
          * 
          * */
-        return $this->render('building/index.html.twig');
+        
+        $nuevoTrayecto=new Trayecto();
+        
+        $nuevoTrayecto->setOrigen(($request->get('origen')));
+        $nuevoTrayecto->setDestino($request->get('destino'));
+        $nuevoTrayecto->setCalle($request->get('calle'));
+        $fechaDateTime = new \DateTime($request->get('fechaDeViaje'));
+        $nuevoTrayecto->setFechaDeViaje($fechaDateTime);
+        $horaDateTime = new \DateTime($request->get('horaDeViaje'));
+        $nuevoTrayecto->setHoraDeViaje($horaDateTime);
+        $nuevoTrayecto->setPrecio($request->get('precio'));
+        $nuevoTrayecto->setDescripcion($request->get('descripcion'));
+        $nuevoTrayecto->setPlazas($request->get('plazas'));
+        $usuarioLogueado = $this->getUser();
+        $nuevoTrayecto->setConductor($usuarioLogueado);
+        
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($nuevoTrayecto);
+        $entityManager->flush();
+ 
+        return $this->redirect($this->generateUrl('public_home'));
     }
 }
 
