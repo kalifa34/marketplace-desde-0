@@ -77,6 +77,11 @@ class Trayecto {
     }
 
     /**
+     * @ORM\Column(type="boolean", options={"default":true})
+     */
+     protected $enabled;
+     
+    /**
      * Get id
      *
      * @return integer 
@@ -291,5 +296,28 @@ class Trayecto {
     public function getConductor()
     {
         return $this->conductor;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return Trayecto
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 }

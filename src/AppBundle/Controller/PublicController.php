@@ -39,12 +39,12 @@ class PublicController extends Controller
         }   
         if($request->get('posted') != ""){
             if ($request->get('country') !="") {
-                $queryBuilder->andWhere('fecha.createdAt > :posted');
+                $queryBuilder->andWhere('trayecto.createdAt > :posted');
             } 
             else {
-                $queryBuilder->where('fecha.createdAt > :posted');
+                $queryBuilder->where('trayecto.createdAt > :posted');
             } 
-            $date=new DateTime();
+            $date=new \DateTime();
             $date->modify('-'.$request->get('posted').' day');
             $parameters['posted']=$date;
         }
@@ -61,7 +61,45 @@ class PublicController extends Controller
             'trayectos' => $trayectosFiltrados
         )
     );
+    
+    //Inicializamos la consulta, QueryBuilder
+    
+    $queryBuilder=$repositorioTrayecto->createQueryBuilder('trayecto');
+    
+    //Aplicamos un primer filtro para los trayectos que estén habilitados
+    
+    $queryBuilder->where('trayecto.enabled=true');
+    
+    //Si se especifica una Ciudad, se aplica dicho filtro
+    
+    if ($request->ge('country') != "") {
         
+        $queryBuilder->andWhere('trayecto.origen = :country')
+        
+            ->orWhere('trayecto.destino = :country');
+        
+        $queryBuilder->setParameter('country', $request->get('country'));
+    }
+    
+    //Si se especifica una fecha máxima para el Viaje, se aplica el filtro
+    
+    if ($request->ge('posted') !="" && $request->get('posted') !="0") {
+        
+        //Se buscan los viajes que estén previstos antes de la fecha indicada en el filtro
+        
+        $queryBuilder->andWhere('trayecto.fechaDeViaje < :fechaDeViaje');
+        
+        //Se calcula la fecha, con la actual + X días (según el parámetro indicado)
+        
+        $date=new \DateTime();
+        $date->modify('+'.$request->get('posted').'day');
+        $quereyBuilder->setParameter('fechaDeViaje',$date);
+    }
+    
+    //Se obtienen los resultados
+    $trayectosFiltrados = $queryBuilder->getQuery()->execute();
+    
+    
         //return $this->render('list/list.html.twig');
         
         /**
