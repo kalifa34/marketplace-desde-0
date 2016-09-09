@@ -20,9 +20,10 @@ class PublicController extends Controller
      */
     public function listAction(Request $request)
     {
+   
         // replace this example code with whatever you need
         
-        
+   
         $entityManager = $this->getDoctrine()->getManager();
         $repositorioTrayecto = $entityManager->getRepository("AppBundle:Trayecto");
         $trayectos = $repositorioTrayecto->findAll();
@@ -62,6 +63,7 @@ class PublicController extends Controller
         )
     );
     
+    
     //Inicializamos la consulta, QueryBuilder
     
     $queryBuilder=$repositorioTrayecto->createQueryBuilder('trayecto');
@@ -72,7 +74,7 @@ class PublicController extends Controller
     
     //Si se especifica una Ciudad, se aplica dicho filtro
     
-    if ($request->ge('country') != "") {
+    if ($request->get('country') !="") {
         
         $queryBuilder->andWhere('trayecto.origen = :country')
         
@@ -83,7 +85,7 @@ class PublicController extends Controller
     
     //Si se especifica una fecha máxima para el Viaje, se aplica el filtro
     
-    if ($request->ge('posted') !="" && $request->get('posted') !="0") {
+    if ($request->get('posted') !="" && $request->get('posted') !="0") {
         
         //Se buscan los viajes que estén previstos antes de la fecha indicada en el filtro
         
@@ -91,7 +93,7 @@ class PublicController extends Controller
         
         //Se calcula la fecha, con la actual + X días (según el parámetro indicado)
         
-        $date=new \DateTime();
+        $date=new\DateTime();
         $date->modify('+'.$request->get('posted').'day');
         $quereyBuilder->setParameter('fechaDeViaje',$date);
     }
@@ -102,32 +104,16 @@ class PublicController extends Controller
     
         //return $this->render('list/list.html.twig');
         
-        /**
-         *  0. Para que funcionen estas instrucciones suponemos que tenemos creada nuestra BBDD con la entidad trayectos y persona y
-         *   todas las variables correctamente
-         *  1. Habría que crear la carpeta app/Resources/views/list
-         *  2. Mover dentro de la carpeta .../list los ficheros del proyecto anterior siguientes:
-         *      filtroCiudad.html.twig
-         *      filtoFecha.html.twig
-         *      listadoTrayectos.html.twig
-         *      trayecto.html.twig
-         * 3. Cambiar los actions de los ficheros por "#"
-         * 4. Habría que copiar dentro de esta acción el contenido del fichero controllers/list.php del proyecto anterior donde
-         *  se encuentran los filtros para poder mostrar todos los datos de forma correcta (Habría que modificar la variable $_GET por $request
-         *  y las demás variables que puedan cambiar en el nuevo proyecto).
-         * 5. Incluir un array en el render con als variables que necesita la página para poder mostrar los datos (country, posted, trayectos).
-         *
-         * 
-         * 
-         * Copiar fichero list/index.html.twig:
-         * https://github.com/sopinet-curso-php/marketplace-symfony/blob/semana7/app/Resources/views/list/index.html.twig
-         *
-         * Poner _ a los ficheros que se incluyen
-         *
-         * En el controlador, cargar el list/index.html.twig
-         **/
+      
     }
     
+    /**
+     * @Route("/terminos", name="public_terminos")
+     */
+    public function terminosAction() {
+        return $this->render('terminos/index.html.twig');
+    }
+
     
     
     
