@@ -61,27 +61,34 @@ class Trayecto {
      */
     protected $plazas;
     
+    
+    /**
+     * @ORM\Column(type="boolean", options={"default" : true})
+     */
+     protected $enabled;
+    
+    
     /**
      * @ORM\ManyToOne(targetEntity="Persona", inversedBy="trayectos")
      * @ORM\JoinColumn(name="persona_id", referencedColumnName="id")
-    */
+     */
     protected $conductor;
+    
+    /**
+      * Inicializa nuestro objeto Trayecto para cuando se vaya a crear uno nuevo, con la fecha y hora actuales
+      *
+      * Trayecto constructor.
+      */
+    
     public function __construct()
     {
+        $this->enabled = true;
         $this->fechaDeViaje = new \DateTime();
         $this->horaDeViaje = new \DateTime();
     }
-    public function __toString()
-    {
-        return "Viaje de ".$this->getOrigen()." a ".$this->getDestino();
-    }
-
-    /**
-     * @ORM\Column(type="boolean", options={"default":true})
-     */
-     protected $enabled;
-     
-    /**
+    
+    
+   /**
      * Get id
      *
      * @return integer 
@@ -298,6 +305,12 @@ class Trayecto {
         return $this->conductor;
     }
 
+    public function __toString()
+    {
+        return "Viaje de ".$this->getOrigen()." a ".$this->getDestino();
+    }
+    
+    
     /**
      * Set enabled
      *
