@@ -22,12 +22,14 @@ class Trayecto {
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Ciudad", inversedBy="trayectosDondeSoyOrigen")
+     * @ORM\JoinColumn(name="origen_id", referencedColumnName="id")
      */
     protected $origen;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Ciudad", inversedBy="trayectosDondeSoyDestino")
+     * @ORM\JoinColumn(name="destino_id", referencedColumnName="id")
      */
     protected $destino;
     
@@ -99,13 +101,14 @@ class Trayecto {
     }
 
     /**
-     * Set origen
-     *
-     * @param string $origen
-     * @return Trayecto
-     */
-    public function setOrigen($origen)
-    {
+     * Set calle
+     * 
+    @param \AppBundle\Entity\Ciudad $origen
+      *
+      * @return Trayecto
+      */
+     public function setOrigen(\AppBundle\Entity\Ciudad $origen = null)
+     {
         $this->origen = $origen;
 
         return $this;
@@ -114,7 +117,7 @@ class Trayecto {
     /**
      * Get origen
      *
-     * @return string 
+     * @return \AppBundle\Entity\Ciudad
      */
     public function getOrigen()
     {
@@ -124,10 +127,11 @@ class Trayecto {
     /**
      * Set destino
      *
-     * @param string $destino
+     * @param \AppBundle\Entity\Ciudad $destino
+     *
      * @return Trayecto
      */
-    public function setDestino($destino)
+    public function setDestino(\AppBundle\Entity\Ciudad $destino = null)
     {
         $this->destino = $destino;
 
@@ -137,200 +141,10 @@ class Trayecto {
     /**
      * Get destino
      *
-     * @return string 
+     * @return \AppBundle\Entity\Ciudad
      */
     public function getDestino()
     {
         return $this->destino;
     }
-
-    /**
-     * Set calle
-     *
-     * @param string $calle
-     * @return Trayecto
-     */
-    public function setCalle($calle)
-    {
-        $this->calle = $calle;
-
-        return $this;
-    }
-
-    /**
-     * Get calle
-     *
-     * @return string 
-     */
-    public function getCalle()
-    {
-        return $this->calle;
-    }
-
-    /**
-     * Set fechaDeViaje
-     *
-     * @param \DateTime $fechaDeViaje
-     * @return Trayecto
-     */
-    public function setFechaDeViaje($fechaDeViaje)
-    {
-        $this->fechaDeViaje = $fechaDeViaje;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDeViaje
-     *
-     * @return \DateTime 
-     */
-    public function getFechaDeViaje()
-    {
-        return $this->fechaDeViaje;
-    }
-
-    /**
-     * Set horaDeViaje
-     *
-     * @param \DateTime $horaDeViaje
-     * @return Trayecto
-     */
-    public function setHoraDeViaje($horaDeViaje)
-    {
-        $this->horaDeViaje = $horaDeViaje;
-
-        return $this;
-    }
-
-    /**
-     * Get horaDeViaje
-     *
-     * @return \DateTime 
-     */
-    public function getHoraDeViaje()
-    {
-        return $this->horaDeViaje;
-    }
-
-    /**
-     * Set precio
-     *
-     * @param float $precio
-     * @return Trayecto
-     */
-    public function setPrecio($precio)
-    {
-        $this->precio = $precio;
-
-        return $this;
-    }
-
-    /**
-     * Get precio
-     *
-     * @return float 
-     */
-    public function getPrecio()
-    {
-        return $this->precio;
-    }
-
-    /**
-     * Set descripcion
-     *
-     * @param string $descripcion
-     * @return Trayecto
-     */
-    public function setDescripcion($descripcion)
-    {
-        $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get descripcion
-     *
-     * @return string 
-     */
-    public function getDescripcion()
-    {
-        return $this->descripcion;
-    }
-
-    /**
-     * Set plazas
-     *
-     * @param integer $plazas
-     * @return Trayecto
-     */
-    public function setPlazas($plazas)
-    {
-        $this->plazas = $plazas;
-
-        return $this;
-    }
-
-    /**
-     * Get plazas
-     *
-     * @return integer 
-     */
-    public function getPlazas()
-    {
-        return $this->plazas;
-    }
-
-    /**
-     * Set conductor
-     *
-     * @param \AppBundle\Entity\Persona $conductor
-     * @return Trayecto
-     */
-    public function setConductor(\AppBundle\Entity\Persona $conductor = null)
-    {
-        $this->conductor = $conductor;
-
-        return $this;
-    }
-
-    /**
-     * Get conductor
-     *
-     * @return \AppBundle\Entity\Persona 
-     */
-    public function getConductor()
-    {
-        return $this->conductor;
-    }
-
-    public function __toString()
-    {
-        return "Viaje de ".$this->getOrigen()." a ".$this->getDestino();
-    }
-    
-    
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     * @return Trayecto
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean 
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-}
+ }
