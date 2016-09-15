@@ -13,7 +13,27 @@
       */
      public function homeAction(Request $request)
      {
-         return $this->render('home/index.html.twig', array(
+      
+        //Instanciamos la clase EntityManager de Doctrine
+        $entityManager=$this->getDoctrine()->getManager();
+         
+        //Obtenemos el número de Ciudades disponibles
+        $repositorioCiudad=$entityManager->getRepository("AppBundle:Ciudad");
+        $ciudades=$repositorioCiudad->findAll();
+        
+        //Obtenemos el número de Trayectos creados
+        $repositorioTrayecto=$entityManager->getRepository("AppBundle:Trayecto");
+        $trayectos=$repositorioTrayecto->findAll();
+        
+        //Obtenemos el número de Conductores de nuestra plataforma
+        $repositorioPersona=$entityManager->getRepository("AppBundle:Persona");
+        $personas=$repositorioPersona->findAll();
+        
+        
+        return $this->render('home/index.html.twig', array(
+         'ciudades'=>$ciudades,
+         'trayectos'=>$trayectos,
+         'personas'=>$personas
          ));
      }
      
@@ -39,6 +59,7 @@
  
          // Si se especifica una fecha máxima para el Viaje, se aplica el filtro
          if ($request->get('posted') != "" && $request->get('posted') != "0") {
+          
              // Se buscan los viajes que estén previstos antes de la fecha indicada en el filtro
              $queryBuilder->andWhere('trayecto.fechaDeViaje < :fechaDeViaje');
              // Se calcula la fecha, con la actual + X días (según el parámetro indicado)
@@ -69,3 +90,6 @@
          return $this->render('terminos/index.html.twig');
      }
  }
+ 
+ ?>
+ 
