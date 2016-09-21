@@ -46,8 +46,28 @@ class PrivateController extends Controller
         
         $nuevoTrayecto=new Trayecto();
         
-        $nuevoTrayecto->setOrigen(($request->get('origen')));
-        $nuevoTrayecto->setDestino($request->get('destino'));
+        // Asignamos los datos recogidos por Request del Form
+        $entityManager = $this->getDoctrine()->getManager();
+        $repositorioCiudad = $entityManager->getRepository("AppBundle:Ciudad");
+        $origen = $repositorioCiudad->findOneByNombre($request->get('origen'));
+        if ($origen == null) {
+           $origen = new Ciudad();
+           $origen->setNombre($request->get('origen'));
+           $entityManager->persist($origen);
+           $entityManager->flush();
+        }
+        
+        $destino = $repositorioCiudad->findOneByNombre($request->get('destino'));
+        if ($destino == null) {
+           $destino = new Ciudad();
+           $destino->setNombre($request->get('destino'));
+           $entityManager->persist($destino);
+           $entityManager->flush();
+        }
+        
+        $nuevoTrayecto->setOrigen($origen);
+        $nuevoTrayecto->setDestino($destino);
+
         $nuevoTrayecto->setCalle($request->get('calle'));
         $fechaDateTime = new \DateTime($request->get('fechaDeViaje'));
         $nuevoTrayecto->setFechaDeViaje($fechaDateTime);
